@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operaciones con Arreglos</title>
+</head>
+<body>
+    <h1>Operaciones con Arreglos</h1>
+    <div>
+        <!-- Input para ingresar los valores -->
+        <label for="valuesInput">Ingrese 5 valores separados por coma:</label><br>
+        <input type="text" id="valuesInput" placeholder="Ej: 10, 5, 8, 15, 3">
+        <!-- Botón para realizar las operaciones -->
+        <button onclick="performOperations()">Realizar Operaciones</button>
+    </div>
+    <!-- Contenedor para mostrar los resultados -->
+    <div id="results"></div>
+
+    <script>
+        // Función para realizar las operaciones con los valores ingresados
+        function performOperations() {
+            // Se obtienen los valores ingresados y se eliminan los espacios en blanco
+            const valuesInput = document.getElementById('valuesInput').value.trim();
+            // Se dividen los valores utilizando la coma como separador y se convierten a números enteros
+            const valuesArray = valuesInput.split(',').map(value => parseInt(value.trim()));
+
+            // Se verifica si se ingresaron exactamente 5 valores numéricos
+            if (valuesArray.length !== 5 || valuesArray.some(isNaN)) {
+                // Se muestra una alerta si los valores ingresados no son válidos
+                alert('Ingrese 5 valores numéricos separados por coma.');
+                return;
+            }
+
+            // Se ordenan los valores de menor a mayor
+            const sortedValues = valuesArray.slice().sort((a, b) => a - b);
+            // Se calcula la suma de los valores
+            const sum = valuesArray.reduce((acc, curr) => acc + curr, 0);
+            // Se calcula el promedio de los valores
+            const average = sum / valuesArray.length;
+            // Se encuentra el mayor valor
+            const max = Math.max(...valuesArray);
+            // Se encuentra el menor valor
+            const min = Math.min(...valuesArray);
+
+            // Se selecciona el contenedor de resultados
+            const resultsDiv = document.getElementById('results');
+            // Se actualiza el contenido del contenedor con los resultados
+            resultsDiv.innerHTML = `
+                <h2>Resultados</h2>
+                <p>Valores Ordenados (Menor a Mayor): ${sortedValues.join(', ')}</p>
+                <p>Suma de los Valores: ${sum}</p>
+                <p>Promedio de los Valores: ${average.toFixed(2)}</p>
+                <p>Mayor Valor: ${max}</p>
+                <p>Menor Valor: ${min}</p>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operaciones con Nombres</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Operaciones con Nombres</h1>
+    <div>
+        <!-- Input para agregar un nuevo nombre -->
+        <input type="text" id="newNameInput" placeholder="Nuevo Nombre">
+        <button onclick="addName()">Agregar Nombre</button>
+        <!-- Tabla para mostrar los nombres -->
+        <table id="namesTable">
+            <thead>
+                <tr>
+                    <th>Nombres</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí se generará la lista de nombres -->
+            </tbody>
+        </table>
+        <!-- Párrafo para mostrar el nombre más largo -->
+        <p id="longestName"></p>
+    </div>
+
+    <script>
+        // Arreglo de nombres inicial
+        let names = ["Ana", "Juan", "Mitchel", "Pedro", "Luis", "Carla", "Pancho", "Sofía", "Ozuna", "Potasio"];
+
+        // Función para mostrar los nombres en la tabla
+        function displayNames() {
+            const tableBody = document.querySelector("#namesTable tbody");
+            tableBody.innerHTML = "";
+            names.forEach((name, index) => {
+                const row = document.createElement("tr");
+                const nameCell = document.createElement("td");
+                nameCell.textContent = name;
+                const deleteCell = document.createElement("td");
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Eliminar";
+                deleteButton.onclick = function() {
+                    deleteName(index);
+                };
+                deleteCell.appendChild(deleteButton);
+                row.appendChild(nameCell);
+                row.appendChild(deleteCell);
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Función para encontrar el nombre más largo
+        function findLongestName() {
+            const longestName = names.reduce((longest, current) => current.length > longest.length ? current : longest, "");
+            return longestName;
+        }
+
+        // Función para agregar un nuevo nombre al arreglo
+        function addName() {
+            const newNameInput = document.getElementById("newNameInput");
+            const newName = newNameInput.value.trim();
+            if (newName !== "") {
+                names.push(newName);
+                newNameInput.value = "";
+                displayNames();
+                updateLongestName();
+            } else {
+                alert("Ingrese un nombre válido.");
+            }
+        }
+
+        // Función para eliminar un nombre del arreglo
+        function deleteName(index) {
+            names.splice(index, 1);
+            displayNames();
+            updateLongestName();
+        }
+
+        // Función para actualizar el nombre más largo en la página
+        function updateLongestName() {
+            const longestName = findLongestName();
+            document.getElementById("longestName").textContent = `El nombre más largo es: ${longestName}`;
+        }
+
+        // Mostrar los nombres y el nombre más largo al cargar la página
+        window.onload = function() {
+            displayNames();
+            updateLongestName();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Números</title>
+</head>
+<body>
+    <h1>Análisis de Números</h1>
+    <div>
+        <!-- Input para ingresar los 10 valores numéricos -->
+        <label for="numbersInput">Ingrese 10 valores numéricos separados por coma:</label><br>
+        <input type="text" id="numbersInput" placeholder="Ej: 5, 10, -3, 7, 0, 12, -8, 15, 20, -6">
+        <!-- Botón para realizar el análisis -->
+        <button onclick="analyzeNumbers()">Realizar Análisis</button>
+    </div>
+    <div id="results"></div>
+
+    <script>
+        function analyzeNumbers() {
+            // Se obtienen los valores ingresados y se eliminan los espacios en blanco
+            const numbersInput = document.getElementById('numbersInput').value.trim();
+            // Se dividen los valores utilizando la coma como separador y se convierten a números
+            const numbersArray = numbersInput.split(',').map(value => parseFloat(value.trim()));
+
+            // Se verifica si se ingresaron exactamente 10 números
+            if (numbersArray.length !== 10 || numbersArray.some(isNaN)) {
+                // Se muestra una alerta si los valores ingresados no son válidos
+                alert('Ingrese exactamente 10 valores numéricos separados por coma.');
+                return;
+            }
+
+            // Se inicializan los contadores
+            let evenCount = 0;
+            let oddCount = 0;
+            let positiveCount = 0;
+            let negativeCount = 0;
+            let between10and100Count = 0;
+
+            // Se recorre el arreglo para realizar el análisis
+            numbersArray.forEach(number => {
+                // Se cuenta si el número es par o impar
+                if (number % 2 === 0) {
+                    evenCount++;
+                } else {
+                    oddCount++;
+                }
+                // Se cuenta si el número es positivo o negativo
+                if (number > 0) {
+                    positiveCount++;
+                } else if (number < 0) {
+                    negativeCount++;
+                }
+                // Se cuenta si el número está entre 10 y 100
+                if (number >= 10 && number <= 100) {
+                    between10and100Count++;
+                }
+            });
+
+            // Se construye el mensaje con los resultados
+            const resultsMessage = `
+                <h2>Resultados</h2>
+                <p>Números pares: ${evenCount}</p>
+                <p>Números impares: ${oddCount}</p>
+                <p>Números positivos: ${positiveCount}</p>
+                <p>Números negativos: ${negativeCount}</p>
+                <p>Números entre 10 y 100: ${between10and100Count}</p>
+            `;
+
+            // Se muestra el mensaje en la página
+            document.getElementById('results').innerHTML = resultsMessage;
+        }
+    </script>
+</body>
+</html>

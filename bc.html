@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operaciones con Palabras</title>
+</head>
+<body>
+    <h1>Operaciones con Palabras</h1>
+    <div>
+        <!-- Input para ingresar las palabras -->
+        <label for="wordsInput">Ingrese 5 palabras separadas por coma:</label><br>
+        <!-- El usuario ingresa las palabras separadas por coma -->
+        <input type="text" id="wordsInput" placeholder="Ej: Casa, Perro, Gato, Loro, Pez">
+        <!-- Botón para realizar las operaciones -->
+        <button onclick="performOperations()">Realizar Operaciones</button>
+    </div>
+    <!-- Div para mostrar los resultados -->
+    <div id="results"></div>
+
+    <script>
+        // Función para realizar las operaciones con las palabras ingresadas
+        function performOperations() {
+            // Se obtienen las palabras ingresadas y se eliminan los espacios en blanco
+            const wordsInput = document.getElementById('wordsInput').value.trim();
+            // Se dividen las palabras utilizando la coma como separador y se eliminan los espacios en blanco alrededor de cada palabra
+            const wordsArray = wordsInput.split(',').map(word => word.trim());
+
+            // Se verifica si se ingresaron exactamente 5 palabras
+            if (wordsArray.length !== 5) {
+                // Se muestra una alerta si el número de palabras ingresadas no es válido
+                alert('Ingrese exactamente 5 palabras separadas por coma.');
+                return;
+            }
+
+            // Se crea una palabra con la primera letra de cada palabra ingresada
+            const firstLetters = wordsArray.map(word => word.charAt(0)).join('');
+            // Se crea una palabra con la última letra de cada palabra ingresada
+            const lastLetters = wordsArray.map(word => word.charAt(word.length - 1)).join('');
+            // Se encuentra la palabra más corta ingresada
+            const shortestWord = wordsArray.reduce((shortest, current) => current.length < shortest.length ? current : shortest, wordsArray[0]);
+            // Se cuenta cuántas palabras comienzan con la letra 'A'
+            const wordsStartingWithA = wordsArray.filter(word => word.charAt(0).toLowerCase() === 'a').length;
+
+            // Se selecciona el div donde se mostrarán los resultados
+            const resultsDiv = document.getElementById('results');
+            // Se actualiza el contenido del div con los resultados
+            resultsDiv.innerHTML = `
+                <h2>Resultados</h2>
+                <p>Palabra creada con la primera letra de cada palabra ingresada: ${firstLetters}</p>
+                <p>Palabra creada con la última letra de cada palabra ingresada: ${lastLetters}</p>
+                <p>Palabra más corta ingresada: ${shortestWord}</p>
+                <p>Cantidad de palabras que comienzan con la letra A: ${wordsStartingWithA}</p>
+            `;
+        }
+    </script>
+</body>
+</html>

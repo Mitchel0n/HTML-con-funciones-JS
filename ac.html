@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bolitas</title>
+    <style>
+        /* Estilo para el canvas */
+        canvas { background: #eee; }
+        /* Estilo para los botones */
+        button { margin: 5px; }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas donde se dibujarán las bolitas -->
+    <canvas id="myCanvas" width="1000" height="750"></canvas>
+    <!-- Botones para las acciones de agregar, quitar, vaciar y multiplicar bolitas -->
+    <div>
+        <button id="addBall">Agregar Bolita</button>
+        <button id="removeBall">Quitar Bolita</button>
+        <button id="clearBalls">Vaciar Bolitas</button>
+        <button id="multiplyBalls">Multiplicar Bolitas al Tocar Pared</button>
+    </div>
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var ballRadius = 10;  // Radio de las bolitas
+        var balls = [];  // Array para almacenar todas las bolitas
+        var multiply = false;  // Variable para activar/desactivar la multiplicación de las bolitas
+
+        // Clase Ball para crear y manejar bolitas
+        class Ball {
+            constructor(x, y, dx, dy, color) {
+                this.x = x;  // Posición X de la bolita
+                this.y = y;  // Posición Y de la bolita
+                this.dx = dx;  // Velocidad en X
+                this.dy = dy;  // Velocidad en Y
+                this.color = color;  // Color de la bolita
+            }
+            
+            // Método para dibujar la bolita en el canvas
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, ballRadius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.closePath();
+            }
+            
+            // Método para actualizar la posición de la bolita
+            update() {
+                // Checar colisión con las paredes y cambiar dirección
+                if (this.x + this.dx > canvas.width - ballRadius || this.x + this.dx < ballRadius) {
+                    this.dx = -this.dx;
+                    // Multiplicar si está activada la función
+                    if (multiply) {
+                        this.multiply();
+                    }
+                }
+                if (this.y + this.dy > canvas.height - ballRadius || this.y + this.dy < ballRadius) {
+                    this.dy = -this.dy;
+                    // Multiplicar si está activada la función
+                    if (multiply) {
+                        this.multiply();
+                    }
+                }
+                
+                // Actualizar posición
+                this.x += this.dx;
+                this.y += this.dy;
+            }
+
+            // Método para multiplicar la bolita
+            multiply() {
+                var newDx = (Math.random() - 0.5) * 4;  // Nueva velocidad X aleatoria
+                var newDy = (Math.random() - 0.5) * 4;  // Nueva velocidad Y aleatoria
+                var newColor = '#' + Math.floor(Math.random() * 16777215).toString(16);  // Nuevo color aleatorio
+                var newBall = new Ball(this.x, this.y, newDx, newDy, newColor);  // Crear nueva bolita
+                balls.push(newBall);  // Añadir nueva bolita al array
+            }
+        }
+
+        // Función para crear una nueva bolita
+        function createBall() {
+            var x = Math.random() * (canvas.width - 2 * ballRadius) + ballRadius;
+            var y = Math.random() * (canvas.height - 2 * ballRadius) + ballRadius;
+            var dx = (Math.random() - 0.5) * 4;
+            var dy = (Math.random() - 0.5) * 4;
+            var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+            balls.push(new Ball(x, y, dx, dy, color));
+        }
+
+        // Función para quitar la última bolita del array
+        function removeBall() {
+            balls.pop();
+        }
+
+        // Función para vaciar todas las bolitas
+        function clearBalls() {
+            balls = [];
+        }
+
+        // Función para activar/desactivar la multiplicación de bolitas
+        function toggleMultiply() {
+            multiply = !multiply;
+            var button = document.getElementById("multiplyBalls");
+            button.innerText = multiply ? "Detener Multiplicación" : "Multiplicar Bolitas al Tocar Pared";
+        }
+
+        // Eventos de clic para los botones
+        document.getElementById("addBall").addEventListener("click", createBall);
+        document.getElementById("removeBall").addEventListener("click", removeBall);
+        document.getElementById("clearBalls").addEventListener("click", clearBalls);
+        document.getElementById("multiplyBalls").addEventListener("click", toggleMultiply);
+
+        // Función para dibujar todas las bolitas y actualizar sus posiciones
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            balls.forEach(ball => {
+                ball.draw();
+                ball.update();
+            });
+        }
+
+        // Intervalo para actualizar el canvas cada 10 milisegundos
+        setInterval(draw, 10);
+    </script>
+</body>
+</html>

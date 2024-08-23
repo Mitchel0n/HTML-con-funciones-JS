@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+</head>
+<body>
+    <h1>Calculadora</h1>
+    <div>
+        <!-- Input para ingresar el primer valor -->
+        <label for="value1">Valor 1:</label>
+        <input type="number" id="value1"><br>
+        <!-- Input para ingresar el segundo valor -->
+        <label for="value2">Valor 2:</label>
+        <input type="number" id="value2"><br>
+        <!-- Selección de la operación a realizar -->
+        <label for="operation">Seleccione la operación:</label>
+        <select id="operation">
+            <option value="sum">Sumar</option>
+            <option value="subtract">Restar</option>
+            <option value="multiply">Multiplicar</option>
+            <option value="divide">Dividir</option>
+            <option value="power">Potencia</option>
+            <option value="compare">Comparar</option>
+        </select><br>
+        <!-- Botón para realizar la operación -->
+        <button onclick="performOperation()">Calcular</button>
+    </div>
+    <div id="result"></div>
+
+    <script>
+        function performOperation() {
+            // Se obtienen los valores ingresados y la operación seleccionada
+            const value1 = parseFloat(document.getElementById('value1').value);
+            const value2 = parseFloat(document.getElementById('value2').value);
+            const operation = document.getElementById('operation').value;
+
+            // Si el segundo valor es 0 y se seleccionó la operación de división, muestra la imagen y borra el contenido
+            if (operation === 'divide' && value2 === 0) {
+                document.getElementById('result').innerHTML = '<img src="img/a1.jpeg">';
+                return;
+            }
+            if (operation === 'divide' && value1 === 0) {
+                document.getElementById('result').innerHTML = '<img src="img/a1.jpeg">';
+                return;
+            }
+
+            let result;
+
+            // Se realiza la operación correspondiente
+            switch(operation) {
+                case 'sum':
+                    result = value1 + value2;
+                    break;
+                case 'subtract':
+                    result = value1 - value2;
+                    break;
+                case 'multiply':
+                    result = value1 * value2;
+                    break;
+                case 'divide':
+                    result = value1 / value2;
+                    break;
+                case 'power':
+                    result = Math.pow(value1, value2);
+                    break;
+                case 'compare':
+                    if (value1 === value2) {
+                        result = "Los valores son iguales";
+                    } else if (value1 > value2) {
+                        result = `${value1} es mayor que ${value2}`;
+                    } else {
+                        result = `${value2} es mayor que ${value1}`;
+                    }
+                    break;
+                default:
+                    result = "Operación no válida";
+            }
+
+            // Se muestra el resultado en la página
+            document.getElementById('result').textContent = `Resultado: ${result}`;
+        }
+    </script>
+</body>
+</html>
